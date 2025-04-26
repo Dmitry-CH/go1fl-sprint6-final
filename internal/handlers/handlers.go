@@ -10,7 +10,7 @@ import (
 )
 
 func MainHandler(w http.ResponseWriter, req *http.Request) {
-	filePath := filepath.Join("../", "index.html")
+	filePath := filepath.Join("./", "index.html")
 
 	data, err := os.ReadFile(filePath)
 	if err != nil {
@@ -49,7 +49,7 @@ func UploadHandler(w http.ResponseWriter, req *http.Request) {
 	fileName := time.Now().UTC().Format("2006-01-02")
 	fileExt := filepath.Ext(fileHeader.Filename)
 
-	filePath := filepath.Join("../", fileName+fileExt)
+	filePath := filepath.Join("./", fileName+fileExt)
 
 	err = os.WriteFile(filePath, []byte(data), 0755)
 	if err != nil {
