@@ -1,20 +1,20 @@
 package service
 
 import (
-	"regexp"
+	"strings"
 
 	"github.com/Yandex-Practicum/go1fl-sprint6-final/pkg/morse"
 )
 
 func ConvertMorseOrText(s string) (string, error) {
-	isText, err := regexp.MatchString(`[А-Яа-я]`, s)
-	if err != nil {
-		return "", err
+	f := func(r rune) bool {
+		return r == '.' || r == '-'
 	}
 
-	if isText {
-		return morse.ToMorse(s), nil
+	isMorse := strings.ContainsFunc(s, f)
+	if isMorse {
+		return morse.ToText(s), nil
 	}
 
-	return morse.ToText(s), nil
+	return morse.ToMorse(s), nil
 }

@@ -11,6 +11,7 @@ func main() {
 
 	s := server.New(l)
 
+	s.Logger.Printf("Сервер запущен, порт %s\n", s.Http.Addr)
 	err := s.Http.ListenAndServe()
 	if err != nil {
 		s.Logger.Fatal(err)

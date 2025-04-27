@@ -10,17 +10,7 @@ import (
 )
 
 func MainHandler(w http.ResponseWriter, req *http.Request) {
-	filePath := filepath.Join("./", "index.html")
-
-	data, err := os.ReadFile(filePath)
-	if err != nil {
-		http.Error(w, "ошибка сервера", http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write(data)
+	http.ServeFile(w, req, "index.html")
 }
 
 func UploadHandler(w http.ResponseWriter, req *http.Request) {
@@ -51,7 +41,7 @@ func UploadHandler(w http.ResponseWriter, req *http.Request) {
 
 	filePath := filepath.Join("./", fileName+fileExt)
 
-	err = os.WriteFile(filePath, []byte(data), 0755)
+	err = os.WriteFile(filePath, []byte(data), 0644)
 	if err != nil {
 		http.Error(w, "ошибка при записи файла", http.StatusInternalServerError)
 		return
@@ -59,5 +49,9 @@ func UploadHandler(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(data))
+	_, err = w.Write([]byte(data))
+	if err != nil {
+		http.Error(w, "ошибка сервера", http.StatusInternalServerError)
+		return
+	}
 }
